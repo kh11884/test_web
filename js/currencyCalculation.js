@@ -2,6 +2,11 @@ function moneyFormat(n) {
     return parseFloat(n).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1 ").replace('.', ',');
 }
 
+// register modal component
+Vue.component('modal', {
+    template: '#modal-template'
+});
+
 var CurrencyCalculator = new Vue({
     el: '#CurrencyCalculator',
     data: {
@@ -14,7 +19,9 @@ var CurrencyCalculator = new Vue({
         rub_charges: "",
         date: "!!! Курсы валют не загрузились. Проверь курсы!!!",
         isHandMadeRates: false,
-        textArea: null
+        textArea: null,
+        test_value: 0,
+        showModal: false
     },
     computed: {
         result: function () {
@@ -40,11 +47,32 @@ var CurrencyCalculator = new Vue({
         }
     },
     methods: {
-          generateTable: function(){
-          var rows = this.textArea.split("\n");
-          console.log(rows);
-          }
+        generateTable: function () {
+            var rows = this.textArea.split("\n");
+            console.log(rows);
+        },
+        testMethod: function () {
+            this.test_value += 1;
+
+            window.getSelection().removeAllRanges();
+            var ta = document.getElementById('tableCopy');
+            //производим его выделение
+            var range = document.createRange();
+            range.selectNode(ta);
+            window.getSelection().addRange(range);
+
+            //пытаемся скопировать текст в буфер обмена
+            try {
+                document.execCommand('copy');
+                this.showModal = true;
+            } catch (err) {
+                alert('Can`t copy, boss');
+            }
+            setTimeout(() => {  this.showModal=false; }, 200);
+            //очистим выделение текста, чтобы пользователь "не парился"
+            // window.getSelection().removeAllRanges();
         }
+    }
 });
 
 function generateTable() {
@@ -54,15 +82,15 @@ function generateTable() {
 
     var table = $('<table />');
 
-    for(var y in rows) {
-    var cells = rows[y].split("\t");
-    var row = $('<tr />');
-    for(var x in cells) {
-        row.append('<td>'+cells[x]+'</td>');
+    for (var y in rows) {
+        var cells = rows[y].split("\t");
+        var row = $('<tr />');
+        for (var x in cells) {
+            row.append('<td>' + cells[x] + '</td>');
+        }
+        table.append(row);
     }
-    table.append(row);
-}
 
 // Insert into DOM
-$('#excel_table').html(table);
+    $('#excel_table').html(table);
 }

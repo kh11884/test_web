@@ -6,11 +6,12 @@
     <title>Калькулятор валют</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
 <div class="container mt-2">
     <div class="row justify-content-md-center">
-        <div id="CurrencyCalculator">
+        <div class="col-12" id="CurrencyCalculator">
             <p>Paste excel data here:</p>
             <textarea name="excel_data" v-model="textArea"></textarea><br>
             <input type="button" @click="generateTable()" value="Genereate Table"/>
@@ -19,9 +20,75 @@
             <hr>
             <div id="excel_table"></div>
 
+            <table class="table" id="tableCopy">
+                <caption>Перечень продуктов</caption>
+                <tr>
+                    <th>№ п/п</th>
+                    <th>Наименование товара</th>
+                    <th>Ед. изм.</th>
+                    <th>Количество</th>
+                    <th>Цена за ед. изм., руб.</th>
+                    <th>Стоимость, руб.</th>
+                </tr>
+                <tr>
+                    <td>1.</td>
+                    <td>Томаты свежие</td>
+                    <td>кг</td>
+                    <td>15,20</td>
+                    <td>69,00</td>
+                    <td>1048,80</td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>Огурцы свежие</td>
+                    <td>кг</td>
+                    <td>2,50</td>
+                    <td>48,00</td>
+                    <td>120,00</td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align:right">ИТОГО:</td>
+                    <td>1168,80</td>
+                </tr>
+            </table>
+
+            <div>
+                <span>{{test_value}}</span>
+            </div>
+
+            <input type="button" @dblclick="testMethod()" value="testMethod"/>
+
+            <!-- app -->
+            <div id="app">
+                <button id="show-modal" @dblclick="showModal = true">Show Modal</button>
+                <!-- use the modal component, pass in the prop -->
+                <modal v-if="showModal" @close="showModal = false">
+                </modal>
+            </div>
+
+            <!-- template for the modal component -->
+            <script type="text/x-template" id="modal-template">
+                <transition name="modal">
+                    <div class="modal-mask">
+                        <div class="modal-wrapper">
+                            <div class="modal-container">
+                                <div class="modal-body">
+                                    <slot name="body">
+                                        Table copied
+                                    </slot>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+            </script>
+
         </div>
     </div>
 </div>
+
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
@@ -31,7 +98,7 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
 <script src="https://unpkg.com/vue"></script>
-<script  src = " https://unpkg.com/axios/dist/axios.min.js "></script >
+<script src=" https://unpkg.com/axios/dist/axios.min.js "></script>
 <script src="js/currencyCalculation.js"></script>
 </body>
 </html>
